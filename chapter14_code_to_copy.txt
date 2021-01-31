@@ -1,0 +1,443 @@
+Code for Indonesian flag:
+fun createPictureOfFlag(): Picture {
+    val height = 300
+    val width = 450
+    val pixels = Array<Array<Color>>(height) {
+        row ->
+        if (row < height / 2) {
+            Array<Color>(width, { column -> Color(255, 0, 0) })
+        } else {
+            Array<Color>(width, { column -> Color(255, 255, 255) })
+        }
+    }
+    return Picture(pixels)
+}
+
+Code for Dubai flag:
+fun createPictureOfFlag(): Picture {
+    val height = 160
+    val width = 340
+    val pixels = Array<Array<Color>>(height) {
+        row ->
+        Array<Color>(width) {
+            column ->
+            if (column < 100) {
+                Color(255, 255, 255)
+            } else {
+                Color(255, 0, 0)
+            }
+        }
+    }
+    return Picture(pixels)
+}
+
+
+Code for white square with red border at top:
+fun createPictureOfFlag(): Picture {
+    val height = 400
+    val width = 400
+    val pixels = Array<Array<Color>>(height) {
+        row ->
+        if (row < 80) {
+            Array<Color>(width) {
+                column ->
+                Color(255, 0, 0)
+            }
+        } else {
+            Array<Color>(width) {
+                column ->
+                Color(255, 255, 255)
+            }
+        }
+    }
+    return Picture(pixels)
+}
+
+Code for white square with red border at top
+and on left side:
+fun createPictureOfFlag(): Picture {
+    val height = 400
+    val width = 400
+    val pixels = Array<Array<Color>>(height) {
+        row ->
+        if (row < 80) {
+            Array<Color>(width) {
+                column ->
+                Color(255, 0, 0)
+            }
+        } else {
+            Array<Color>(width) {
+                column ->
+                if (column < 80) {
+                    Color(255, 0, 0)
+                } else {
+                    Color(255, 255, 255)
+                }
+            }
+        }
+    }
+    return Picture(pixels)
+}
+
+
+Refactored version of this code:
+val white = Color(255, 255, 255)
+val red = Color(255, 0, 0)
+
+fun createPictureOfFlag(): Picture {
+    val height = 400
+    val width = 400
+    val pixels = Array<Array<Color>>(height) {
+        row ->
+        Array<Color>(width) {
+            column ->
+            colorForLocation(row, column)
+        }
+    }
+    return Picture(pixels)
+}
+
+fun colorForLocation(row: Int, column: Int): Color {
+    if (row < 80) {//top
+        return red
+    } else {
+        if (column < 80) {//left
+            return red
+        } else {
+            return white
+        }
+    }
+}
+
+
+Improved version of extracted colorForLocation function:
+fun colorForLocation(row: Int, column: Int): Color {
+    if (row < 80) return red//top
+    if (column < 80) return red//left
+    return white//anything else
+}
+
+
+Version of colorForLocation that produces
+the red box:
+fun colorForLocation(c: Int, r: Int): Color {
+    if (r < 80) return red//top
+    if (r > 320) return red//bottom
+    if (c < 80) return red//left
+    if (c > 320) return red//right
+    return white//anything else
+}
+
+
+
+Section 14.3:
+package lpk.imaging
+
+import java.awt.Color
+import java.io.File
+import java.io.FileInputStream
+import javax.imageio.ImageIO
+
+fun loadPictureFromFile(imageFile: File): Picture {
+    val image = ImageIO.read(imageFile)
+    val width = image.width
+    val height = image.height
+    val pixels = Array<Array<Color>>(height) {
+        row ->
+        Array<Color>(width) {
+            column ->
+            Color(image.getRGB(column, row))
+        }
+    }
+    return Picture(pixels)
+}
+class Picture(val pixels: Array<Array<Color>>) {
+    fun height(): Int {
+        return pixels.size
+    }
+
+    fun width(): Int {
+        return pixels[0].size
+    }
+
+    fun pixelByRowColumn(row: Int, column: Int): Color {
+        return pixels[row][column]
+    }
+}
+
+
+Just before Programming Challenge 14.7:
+package lpk.imaging.test
+
+import org.junit.Assert
+import org.junit.Test
+import lpk.imaging.Picture
+import lpk.imaging.loadPictureFromFile
+import java.awt.Color
+import java.nio.file.Paths
+
+private val IMAGES = "src/test/resources/images/"
+
+class PictureTest {
+    @Test
+    fun loadPictureFromFileTest() {
+        val file = Paths.get(IMAGES + "green_h50_w100.png").toFile()
+        val loaded = loadPictureFromFile(file)
+        Assert.assertEquals(loaded.height(), 50)
+        Assert.assertEquals(loaded.width(), 100)
+        val green = Color(0, 255, 0)
+        for (row in 0..49) {
+            for (column in 0..99) {
+                Assert.assertEquals(loaded.pixelByRowColumn(row, column), green)
+            }
+        }
+    }
+}
+
+
+Just after Programming Challenge 14.7:
+package lpk.imaging
+
+import javafx.application.Application
+import java.nio.file.Paths
+
+fun main() {
+    PhotoDisplayer().show()
+}
+
+class PhotoDisplayer : PictureDisplayer() {
+    private val IMAGES = "src/main/resources/images/"
+
+    override fun createPicture() : Picture {
+        val file = Paths.get(IMAGES + "bay.png").toFile()
+        return loadPictureFromFile(file)
+    }
+
+    //Do not edit anything below here.
+    fun show() {
+        Application.launch()
+    }
+}
+
+
+Programming Challenge 14.8:
+fun flipInVerticalAxis(): Picture {
+    val pixels = Array<Array<Color>>(height()) {
+        row ->
+        Array<Color>(width()) {
+            column ->
+            Color(0, 0, 0)
+        }
+    }
+    return Picture(pixels)
+}
+
+Programming Challenge 14.9:
+fun checkPicture(picture: Picture, expected: Picture) {
+    Assert.assertEquals(picture.height(), expected.height())
+    Assert.assertEquals(picture.width(), expected.width())
+    for (row in 0..picture.height() - 1) {
+        for (column in 0..picture.width() - 1) {
+            val actualPixel = picture.pixelByRowColumn(row, column)
+            val expectedPixel = expected.pixelByRowColumn(row, column)
+            Assert.assertEquals(actualPixel, expectedPixel)
+        }
+    }
+}
+
+After Programming Challenge 14.9:
+@Test
+fun flipInVerticalAxisTest() {
+    val fileBR = Paths.get(IMAGES + "blue_red.png").toFile()
+    val blueRed = loadPictureFromFile(fileBR)
+
+    val fileRB = Paths.get(IMAGES + "red_blue.png").toFile()
+    val redBlue = loadPictureFromFile(fileRB)
+
+    val flipped = blueRed.flipInVerticalAxis()
+    checkPicture(flipped, redBlue)
+}
+
+
+---- Solutions to Programming Challenges ----
+Programming Challenge 14.2:
+fun createPictureOfFlag(): Picture {
+    val height = 300
+    val width = 450
+    val pixels = Array<Array<Color>>(height) {
+        row ->
+        if (row < height / 2) {
+            Array<Color>(width, { column -> Color(51, 102, 255) })
+        } else {
+            Array<Color>(width, { column -> Color(254, 203, 0) })
+        }
+    }
+    return Picture(pixels)
+}
+
+Programming Challenge 14.3:
+fun createPictureOfFlag(): Picture {
+    val height = 300
+    val width = 500
+    val pixels = Array<Array<Color>>(height) {
+        row ->
+        if (row < 100) {
+            Array<Color>(width, { column -> Color(0, 0, 0) })
+        } else if (row < 200){
+            Array<Color>(width, { column -> Color(255, 0, 0) })
+        } else {
+            Array<Color>(width, { column -> Color(255, 212, 0) })
+        }
+    }
+    return Picture(pixels)
+}
+
+
+Programming Challenge 14.4:
+fun createPictureOfFlag(): Picture {
+    val height = 200
+    val width = 300
+    val pixels = Array<Array<Color>>(height) {
+        row ->
+        Array<Color>(width) {
+            column ->
+            if (column < 100) {
+                Color(0, 145, 69)
+            } else if (column < 200) {
+                Color(255, 255, 255)
+            } else {
+                Color(207, 43, 56)
+            }
+        }
+    }
+    return Picture(pixels)
+}
+
+
+Programming Challenge 14.5:
+package lpk.imaging
+
+import java.awt.Color
+
+fun main() {
+    Flag().show()
+}
+
+class Flag : PictureDisplayer() {
+
+    val white = Color(255, 255, 255)
+    val red = Color(255, 0, 0)
+
+    fun createPictureOfFlag(): Picture {
+        val height = 400
+        val width = 400
+        val pixels = Array<Array<Color>>(height) {
+            row ->
+            Array<Color>(width) {
+                column ->
+                colorForLocation(row, column)
+            }
+        }
+        return Picture(pixels)
+    }
+
+    fun colorForLocation(c: Int, r: Int): Color {
+        if (r < 80) return red//top
+        if (r > 320) return red//bottom
+        if (c < 80) return red//left
+        if (c > 320) return red//right
+        return white//anything else
+    }
+
+    //Don't change anything below here.
+    override fun createPicture(): Picture {
+        return createPictureOfFlag()
+    }
+
+    fun show() {
+        launch()
+    }
+}
+
+
+Programming Challenge 14.6:
+fun colorForLocation(r: Int, c: Int): Color {
+    if (c < 80) return red//left
+    if (c >= 320) return red//right
+    if (r < 80) return red//top
+    if (r >= 320) return red//bottom,
+    if (c < 160 && r < 160) return red
+    if (c > 240 && r < 160) return red
+    if (c < 160 && r > 240) return red
+    if (c > 240 && r > 240) return red
+    return white
+}
+
+
+Programming Challenge 14.7:
+@Test
+fun loadYellowPicture() {
+    val file = Paths.get(IMAGES + "yellow_h80_w30.png").toFile()
+    val loaded = loadPictureFromFile(file)
+    Assert.assertEquals(loaded.height(), 80)
+    Assert.assertEquals(loaded.width(), 30)
+    val yellow = Color(255, 255, 0)
+    for (row in 0..79) {
+        for (column in 0..29) {
+            Assert.assertEquals(loaded.pixelByRowColumn(row, column), yellow)
+        }
+    }
+}
+
+Programming Challenge 14.10:
+fun flipInVerticalAxis(): Picture {
+    val pixels = Array<Array<Color>>(height()) {
+        row ->
+        Array<Color>(width()) {
+            column ->
+            pixelByRowColumn(row, width() - 1 - column )
+        }
+    }
+    return Picture(pixels)
+}
+
+
+Programming Challenge 14.11:
+@Test
+fun flipInHorizontalAxisTest() {
+    val fileGR = Paths.get(IMAGES + "green_red.png").toFile()
+    val greenRed = loadPictureFromFile(fileGR)
+
+    val fileRG = Paths.get(IMAGES + "red_green.png").toFile()
+    val redGreen = loadPictureFromFile(fileRG)
+
+    val flipped = greenRed.flipInHorizontalAxis()
+    checkPicture(flipped, redGreen)
+}
+
+
+Programming Challenge 14.12:
+@Test
+fun flipInHorizontalAxisTest() {
+    val fileGR = Paths.get(IMAGES + "green_red.png").toFile()
+    val greenRed = loadPictureFromFile(fileGR)
+
+    val fileRG = Paths.get(IMAGES + "red_green.png").toFile()
+    val redGreen = loadPictureFromFile(fileRG)
+
+    val flipped = greenRed.flipInHorizontalAxis()
+    checkPicture(flipped, redGreen)
+}
+
+
+Programming Challenge 14.13:
+override fun createPicture() : Picture {
+    val file = Paths.get(IMAGES + "bay.png").toFile()
+    return loadPictureFromFile(file).
+	                 flipInVerticalAxis().
+					 flipInHorizontalAxis()
+}
+
+
+
+
