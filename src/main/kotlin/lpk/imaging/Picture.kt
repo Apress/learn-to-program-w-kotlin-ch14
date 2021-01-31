@@ -28,22 +28,4 @@ class Picture(val pixels: Array<Array<Color>>) {
     fun pixelByRowColumn(row: Int, column: Int): Color {
         return pixels[row][column]
     }
-
-    fun flipInVerticalAxis(): Picture {
-        val pixels = Array(height()) { row ->
-            Array(width()) { column ->
-                pixelByRowColumn(row, width() - 1 - column)
-            }
-        }
-        return Picture(pixels)
-    }
-
-fun flipInHorizontalAxis(): Picture {
-    val pixels = Array(height()) { row ->
-        Array(width()) { column ->
-            pixelByRowColumn(height() - 1 - row, column)
-        }
-    }
-    return Picture(pixels)
-}
 }
