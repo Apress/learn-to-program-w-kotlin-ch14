@@ -12,8 +12,8 @@ class Flag : PictureDisplayer() {
         val height = 300
         val width = 450
 
-        val pixels = Array<Array<Color>>(height) {
-            Array<Color>(width) { Color(255, 255, 255) }
+        val pixels = Array(height) {
+            Array(width) { Color(255, 255, 255) }
         }
         for (row in 0..height - 1) {
             for (column in 0..width - 1) {
@@ -33,6 +33,6 @@ class Flag : PictureDisplayer() {
     }
 
     fun show() {
-        launch()
+        doLaunch()
     }
 }
