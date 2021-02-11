@@ -352,7 +352,7 @@ val white = Color(255, 255, 255)
     }
 
     fun show() {
-        launch()
+        doLaunch()
     }
 }
 
