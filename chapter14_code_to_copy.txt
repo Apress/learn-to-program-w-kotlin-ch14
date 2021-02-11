@@ -96,22 +96,6 @@ fun createPictureOfFlag(): Picture {
     return Picture(pixels)
 }
 
-val white = Color(255, 255, 255)
-val red = Color(255, 0, 0)
-
-fun createPictureOfFlag(): Picture {
-    val height = 400
-    val width = 400
-    val pixels = Array(height) {
-            row ->
-        Array(width) {
-                column ->
-            colorForLocation(row, column)
-        }
-    }
-    return Picture(pixels)
-}
-
 fun colorForLocation(row: Int, column: Int): Color {
     if (row < 80) {//top
         return red
