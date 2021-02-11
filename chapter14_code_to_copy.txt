@@ -195,7 +195,6 @@ class PictureTest {
 Just after Programming Challenge 14.7:
 package lpk.imaging
 
-import javafx.application.Application
 import java.nio.file.Paths
 
 fun main() {
@@ -212,7 +211,7 @@ class PhotoDisplayer : PictureDisplayer() {
 
     //Do not edit anything below here.
     fun show() {
-        Application.launch()
+        doLaunch()
     }
 }
 
