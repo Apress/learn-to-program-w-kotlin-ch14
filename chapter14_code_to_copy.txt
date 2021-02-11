@@ -2,12 +2,12 @@ Code for Indonesian flag:
 fun createPictureOfFlag(): Picture {
     val height = 300
     val width = 450
-    val pixels = Array<Array<Color>>(height) {
-        row ->
+    val pixels = Array(height) {
+            row ->
         if (row < height / 2) {
-            Array<Color>(width, { column -> Color(255, 0, 0) })
+            Array(width, { column -> Color(255, 0, 0) })
         } else {
-            Array<Color>(width, { column -> Color(255, 255, 255) })
+            Array(width, { column -> Color(255, 255, 255) })
         }
     }
     return Picture(pixels)
@@ -17,10 +17,10 @@ Code for Dubai flag:
 fun createPictureOfFlag(): Picture {
     val height = 160
     val width = 340
-    val pixels = Array<Array<Color>>(height) {
-        row ->
-        Array<Color>(width) {
-            column ->
+    val pixels = Array(height) {
+            row ->
+        Array(width) {
+                column ->
             if (column < 100) {
                 Color(255, 255, 255)
             } else {
@@ -31,21 +31,20 @@ fun createPictureOfFlag(): Picture {
     return Picture(pixels)
 }
 
-
 Code for white square with red border at top:
 fun createPictureOfFlag(): Picture {
     val height = 400
     val width = 400
-    val pixels = Array<Array<Color>>(height) {
-        row ->
+    val pixels = Array(height) {
+            row ->
         if (row < 80) {
-            Array<Color>(width) {
-                column ->
+            Array(width) {
+                    column ->
                 Color(255, 0, 0)
             }
         } else {
-            Array<Color>(width) {
-                column ->
+            Array(width) {
+                    column ->
                 Color(255, 255, 255)
             }
         }
@@ -58,16 +57,16 @@ and on left side:
 fun createPictureOfFlag(): Picture {
     val height = 400
     val width = 400
-    val pixels = Array<Array<Color>>(height) {
-        row ->
+    val pixels = Array(height) {
+            row ->
         if (row < 80) {
-            Array<Color>(width) {
-                column ->
+            Array(width) {
+                    column ->
                 Color(255, 0, 0)
             }
         } else {
-            Array<Color>(width) {
-                column ->
+            Array(width) {
+                    column ->
                 if (column < 80) {
                     Color(255, 0, 0)
                 } else {
@@ -97,6 +96,22 @@ fun createPictureOfFlag(): Picture {
     return Picture(pixels)
 }
 
+val white = Color(255, 255, 255)
+val red = Color(255, 0, 0)
+
+fun createPictureOfFlag(): Picture {
+    val height = 400
+    val width = 400
+    val pixels = Array(height) {
+            row ->
+        Array(width) {
+                column ->
+            colorForLocation(row, column)
+        }
+    }
+    return Picture(pixels)
+}
+
 fun colorForLocation(row: Int, column: Int): Color {
     if (row < 80) {//top
         return red
@@ -108,7 +123,6 @@ fun colorForLocation(row: Int, column: Int): Color {
         }
     }
 }
-
 
 Improved version of extracted colorForLocation function:
 fun colorForLocation(row: Int, column: Int): Color {
@@ -135,17 +149,16 @@ package lpk.imaging
 
 import java.awt.Color
 import java.io.File
-import java.io.FileInputStream
 import javax.imageio.ImageIO
 
 fun loadPictureFromFile(imageFile: File): Picture {
     val image = ImageIO.read(imageFile)
     val width = image.width
     val height = image.height
-    val pixels = Array<Array<Color>>(height) {
-        row ->
-        Array<Color>(width) {
-            column ->
+    val pixels = Array(height) {
+            row ->
+        Array(width) {
+                column ->
             Color(image.getRGB(column, row))
         }
     }
@@ -222,15 +235,16 @@ class PhotoDisplayer : PictureDisplayer() {
 
 Programming Challenge 14.8:
 fun flipInVerticalAxis(): Picture {
-    val pixels = Array<Array<Color>>(height()) {
-        row ->
-        Array<Color>(width()) {
-            column ->
+    val pixels = Array(height()) {
+            row ->
+        Array(width()) {
+                column ->
             Color(0, 0, 0)
         }
     }
     return Picture(pixels)
 }
+
 
 Programming Challenge 14.9:
 fun checkPicture(picture: Picture, expected: Picture) {
@@ -264,12 +278,12 @@ Programming Challenge 14.2:
 fun createPictureOfFlag(): Picture {
     val height = 300
     val width = 450
-    val pixels = Array<Array<Color>>(height) {
-        row ->
+    val pixels = Array(height) {
+            row ->
         if (row < height / 2) {
-            Array<Color>(width, { column -> Color(51, 102, 255) })
+            Array(width, { column -> Color(51, 102, 255) })
         } else {
-            Array<Color>(width, { column -> Color(254, 203, 0) })
+            Array(width, { column -> Color(254, 203, 0) })
         }
     }
     return Picture(pixels)
@@ -279,14 +293,14 @@ Programming Challenge 14.3:
 fun createPictureOfFlag(): Picture {
     val height = 300
     val width = 500
-    val pixels = Array<Array<Color>>(height) {
-        row ->
+    val pixels = Array(height) {
+            row ->
         if (row < 100) {
-            Array<Color>(width, { column -> Color(0, 0, 0) })
+            Array(width, { column -> Color(0, 0, 0) })
         } else if (row < 200){
-            Array<Color>(width, { column -> Color(255, 0, 0) })
+            Array(width, { column -> Color(255, 0, 0) })
         } else {
-            Array<Color>(width, { column -> Color(255, 212, 0) })
+            Array(width, { column -> Color(255, 212, 0) })
         }
     }
     return Picture(pixels)
@@ -297,10 +311,10 @@ Programming Challenge 14.4:
 fun createPictureOfFlag(): Picture {
     val height = 200
     val width = 300
-    val pixels = Array<Array<Color>>(height) {
-        row ->
-        Array<Color>(width) {
-            column ->
+    val pixels = Array(height) {
+            row ->
+        Array(width) {
+                column ->
             if (column < 100) {
                 Color(0, 145, 69)
             } else if (column < 200) {
@@ -325,22 +339,22 @@ fun main() {
 
 class Flag : PictureDisplayer() {
 
-    val white = Color(255, 255, 255)
+val white = Color(255, 255, 255)
     val red = Color(255, 0, 0)
-
+    
     fun createPictureOfFlag(): Picture {
         val height = 400
         val width = 400
-        val pixels = Array<Array<Color>>(height) {
-            row ->
-            Array<Color>(width) {
-                column ->
+        val pixels = Array(height) {
+                row ->
+            Array(width) {
+                    column ->
                 colorForLocation(row, column)
             }
         }
         return Picture(pixels)
     }
-
+    
     fun colorForLocation(c: Int, r: Int): Color {
         if (r < 80) return red//top
         if (r > 320) return red//bottom
@@ -348,7 +362,7 @@ class Flag : PictureDisplayer() {
         if (c > 320) return red//right
         return white//anything else
     }
-
+    
     //Don't change anything below here.
     override fun createPicture(): Picture {
         return createPictureOfFlag()
@@ -391,11 +405,11 @@ fun loadYellowPicture() {
 
 Programming Challenge 14.10:
 fun flipInVerticalAxis(): Picture {
-    val pixels = Array<Array<Color>>(height()) {
-        row ->
-        Array<Color>(width()) {
-            column ->
-            pixelByRowColumn(row, width() - 1 - column )
+    val pixels = Array(height()) {
+            row ->
+        Array(width()) {
+                column ->
+            Color(0, 0, 0)
         }
     }
     return Picture(pixels)
