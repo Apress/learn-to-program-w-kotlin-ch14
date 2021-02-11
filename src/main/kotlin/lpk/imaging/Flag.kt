@@ -2,7 +2,7 @@ package lpk.imaging
 
 import java.awt.Color
 
-fun main(args: Array<String>) {
+fun main() {
     Flag().show()
 }
 
