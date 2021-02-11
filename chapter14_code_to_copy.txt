@@ -86,10 +86,10 @@ val red = Color(255, 0, 0)
 fun createPictureOfFlag(): Picture {
     val height = 400
     val width = 400
-    val pixels = Array<Array<Color>>(height) {
-        row ->
-        Array<Color>(width) {
-            column ->
+    val pixels = Array(height) {
+            row ->
+        Array(width) {
+                column ->
             colorForLocation(row, column)
         }
     }
